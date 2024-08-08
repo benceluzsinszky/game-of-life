@@ -39,45 +39,41 @@ export default function App() {
 
   return (
     <>
-      <header>
-        <h1>Conway&apos;s Game of Life</h1>
-      </header>
-      <main>
-        <section>
-          <GameGrid
-            size={size}
-            speed={speed}
-            isRunning={isRunning}
-            gridArray={gridArray}
-            setGridArray={setGridArray}
-            gridArrayToCss={gridArrayToCss} />
-        </section>
-        <section>
-          <label htmlFor="sizeSlider">Grid Size: {size} </label>
-          <input
-            id="sizeSlider"
-            type="range"
-            min="5"
-            max="50"
-            step={0.01}
-            value={sliderSize}
-            onChange={handleSizeChange}
-          /><br />
-          <label htmlFor='speedSlider'>Speed: {speed} </label>
-          <input
-            id='speedSlider'
-            type='range'
-            min='1'
-            max='10'
-            step={0.01}
-            value={sliderSpeed}
-            onChange={handleSpeedChange}
-          /><br />
-          <button id="start" onClick={() => setIsRunning(true)}>Start</button>
-          <button id="stop" onClick={() => setIsRunning(false)}>Stop</button>
-          <button id="clear" onClick={handleClear}>Clear</button>
-        </section>
-      </main>
+      <h1>Conway&apos;s Game of Life</h1>
+      <GameGrid
+        size={size}
+        speed={speed}
+        isRunning={isRunning}
+        gridArray={gridArray}
+        setGridArray={setGridArray}
+        gridArrayToCss={gridArrayToCss} />
+      <div className='sliders'>
+        <label htmlFor="sizeSlider">Grid Size: {size} </label>
+        <input
+          id="sizeSlider"
+          type="range"
+          min="5"
+          max="50"
+          step={0.01}
+          value={sliderSize}
+          onChange={handleSizeChange}
+        />
+        <label htmlFor='speedSlider'>Speed: {speed} </label>
+        <input
+          id='speedSlider'
+          type='range'
+          min='1'
+          max='10'
+          step={0.01}
+          value={sliderSpeed}
+          onChange={handleSpeedChange}
+        />
+      </div>
+      <div className='buttons'>
+        <button id="start" onClick={() => setIsRunning(true)}>Start</button>
+        <button id="stop" onClick={() => setIsRunning(false)}>Stop</button>
+        <button id="clear" onClick={handleClear}>Clear</button>
+      </div>
     </>
   );
 };

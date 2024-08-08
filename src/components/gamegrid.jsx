@@ -6,7 +6,7 @@ export default function GameGrid({ size, speed, isRunning, gridArray, setGridArr
 
 
     const createGrid = (size) => {
-        const cellSize = screen.height / 2 / size;
+        const cellSize = screen.height / 3 / size;
 
         let rows = [];
         for (let i = 0; i < size; i++) {

@@ -1,13 +1,8 @@
 .game-grid {
     border-collapse: collapse;
     border: 2px solid var(--mid-white);
-    min-width: calc(100vh / 3);
-    min-height: calc(100vh / 3);
-}
-
-.game-grid td {
-    padding: 0;
-    margin: 0;
+    min-width: calc(100vh / 2);
+    min-height: calc(100vh / 2);
 }
 
 .game-cell {
