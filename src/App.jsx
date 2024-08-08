@@ -4,7 +4,7 @@ import './styles/App.css';
 
 export default function App() {
   const [size, setSize] = useState(10);
-  const [speed, setSpeed] = useState(1);
+  const [speed, setSpeed] = useState(5);
   const [isRunning, setIsRunning] = useState(false);
 
   const [gridArray, setGridArray] = useState(Array(size * size).fill(0));
