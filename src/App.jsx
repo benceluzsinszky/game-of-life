@@ -21,6 +21,16 @@ export default function App() {
     setSpeed(parseInt(event.target.value));
   };
 
+  const handleRandomize = () => {
+    setIsRunning(false);
+    let randomArray = [];
+    for (let i = 0; i < size * size; i++) {
+      randomArray.push(Math.random() < 0.2 ? 1 : 0);
+    }
+    setGridArray(randomArray);
+    gridArrayToCss(randomArray);
+  };
+
   const handleClear = () => {
     setIsRunning(false);
     setGridArray(gridArray.fill(0));
@@ -40,6 +50,7 @@ export default function App() {
   return (
     <>
       <h1>Conway&apos;s Game of Life</h1>
+      <p></p>
       <GameGrid
         size={size}
         speed={speed}
@@ -73,6 +84,7 @@ export default function App() {
         <button id="start" onClick={() => setIsRunning(true)}>Start</button>
         <button id="stop" onClick={() => setIsRunning(false)}>Stop</button>
         <button id="clear" onClick={handleClear}>Clear</button>
+        <button id="random" onClick={handleRandomize}>Random</button>
       </div>
     </>
   );
