@@ -1,6 +1,6 @@
 .game-grid {
     border-collapse: collapse;
-    border: 2px solid rgb(255, 255, 255, 0.7);
+    border: 2px solid var(--mid-white);
     min-width: calc(100vh / 3);
     min-height: calc(100vh / 3);
 }
@@ -18,11 +18,11 @@
 }
 
 .game-cell.alive {
-    background-color: rgb(255, 255, 255, 0.7);
+    background-color: var(--mid-white);
 }
 
 .game-cell.alive:hover {
-    background-color: rgb(255, 255, 255, 0.9);
+    background-color: var(--bright-white);
 }
 
 .game-cell.dead {
@@ -30,5 +30,5 @@
 }
 
 .game-cell.dead:hover {
-    background-color: rgb(255, 255, 255, 0.5);
+    background-color: var(--bright-grey);
 }

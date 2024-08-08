@@ -4,17 +4,21 @@ import './styles/App.css';
 
 export default function App() {
   const [size, setSize] = useState(10);
+  const [sliderSize, setSliderSize] = useState(10);
   const [speed, setSpeed] = useState(5);
+  const [sliderSpeed, setSliderSpeed] = useState(5);
   const [isRunning, setIsRunning] = useState(false);
   const [gridArray, setGridArray] = useState(Array(size * size).fill(0));
 
   const handleSizeChange = (event) => {
-    setSize(Number(event.target.value));
+    setSliderSize(Number(event.target.value));
+    setSize(parseInt(event.target.value));
     handleClear();
   };
 
   const handleSpeedChange = (event) => {
-    setSpeed(Number(event.target.value));
+    setSliderSpeed(Number(event.target.value));
+    setSpeed(parseInt(event.target.value));
   };
 
   const handleClear = () => {
@@ -55,7 +59,8 @@ export default function App() {
             type="range"
             min="5"
             max="50"
-            value={size}
+            step={0.01}
+            value={sliderSize}
             onChange={handleSizeChange}
           /><br />
           <label htmlFor='speedSlider'>Speed: {speed} </label>
@@ -64,7 +69,8 @@ export default function App() {
             type='range'
             min='1'
             max='10'
-            value={speed}
+            step={0.01}
+            value={sliderSpeed}
             onChange={handleSpeedChange}
           /><br />
           <button id="start" onClick={() => setIsRunning(true)}>Start</button>
