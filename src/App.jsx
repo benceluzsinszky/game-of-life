@@ -50,7 +50,6 @@ export default function App() {
   return (
     <>
       <h1>Conway&apos;s Game of Life</h1>
-      <p></p>
       <GameGrid
         size={size}
         speed={speed}
