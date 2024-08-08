@@ -16,7 +16,6 @@ export default function GameGrid({ size, speed, isRunning, gridArray, setGridArr
                 cells.push(<td
                     key={index}
                     className={`game-cell dead`}
-                    title={`${index}`}
                     id={`cell-${index}`}
                     style={
                         {
