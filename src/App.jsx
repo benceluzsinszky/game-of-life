@@ -9,7 +9,6 @@ export default function App() {
 
   const [gridArray, setGridArray] = useState(Array(size * size).fill(0));
 
-
   const handleSizeChange = (event) => {
     setSize(Number(event.target.value));
   };
@@ -33,7 +32,6 @@ export default function App() {
       }
     }
   };
-
 
   return (
     <>
