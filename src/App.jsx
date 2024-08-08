@@ -1,16 +1,16 @@
 import { useState } from 'react';
-import GameGrid from './components/gamegrid';
+import GameGrid from './components/GameGrid';
 import './styles/App.css';
 
 export default function App() {
   const [size, setSize] = useState(10);
   const [speed, setSpeed] = useState(5);
   const [isRunning, setIsRunning] = useState(false);
-
   const [gridArray, setGridArray] = useState(Array(size * size).fill(0));
 
   const handleSizeChange = (event) => {
     setSize(Number(event.target.value));
+    handleClear();
   };
 
   const handleSpeedChange = (event) => {
@@ -49,13 +49,12 @@ export default function App() {
             gridArrayToCss={gridArrayToCss} />
         </section>
         <section>
-          <h2>Controls</h2>
           <label htmlFor="sizeSlider">Grid Size: {size} </label>
           <input
             id="sizeSlider"
             type="range"
             min="5"
-            max="100"
+            max="50"
             value={size}
             onChange={handleSizeChange}
           /><br />
