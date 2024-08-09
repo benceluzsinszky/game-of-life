@@ -11,7 +11,7 @@ export default function App() {
       case 'SET_SPEED':
         return { ...state, speed: action.payload };
       case 'INCREASE_GENERATION':
-        return { ...state, generation: state.generation++ };
+        return { ...state, generation: state.generation + 1 };
       case 'RESET_GENERATION':
         return { ...state, generation: 0 };
       case 'START_RUNNING':
