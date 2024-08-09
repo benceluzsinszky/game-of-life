@@ -130,10 +130,10 @@ export default function App() {
         />
       </div>
       <div className='buttons'>
-        <button id="start" onClick={handleStart}>Start</button>
-        <button id="stop" onClick={() => dispatch({ type: "STOP_RUNNING", payload: false })}>Stop</button>
-        <button id="clear" onClick={handleClear}>Clear</button>
-        <button id="random" onClick={handleRandomize}>Random</button>
+        <button onClick={handleStart}>Start</button>
+        <button onClick={() => dispatch({ type: "STOP_RUNNING", payload: false })}>Stop</button>
+        <button onClick={handleClear}>Clear</button>
+        <button onClick={handleRandomize}>Random</button>
       </div>
     </>
   );
