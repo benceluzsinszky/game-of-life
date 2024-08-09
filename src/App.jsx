@@ -66,6 +66,7 @@ export default function App() {
 
   const handleClear = () => {
     dispatch({ type: 'STOP_RUNNING' });
+    dispatch({ type: 'RESET_GENERATION' });
     dispatch({ type: 'SET_GRID', payload: state.gridArray.fill(0) });
     gridArrayToCss(state.gridArray);
   };
@@ -88,16 +89,23 @@ export default function App() {
   return (
     <>
       <h1>Conway&apos;s Game of Life</h1>
-      <p>Generation: {state.generation}</p>
-      <p>Alive Cells: {aliveCells}</p>
+      <div className='info'>
+        <div className='info-text'>
+          <p>Generation:</p><p>{state.generation}</p>
+        </div>
+        <div className='info-text'>
+          <p>Alive Cells:</p><p>{aliveCells}</p>
+        </div>
+      </div>
       <GameGrid
         state={state}
         dispatch={dispatch}
         gridArrayToCss={gridArrayToCss} />
       <div className='sliders'>
-        <label htmlFor="sizeSlider">Grid Size: {state.size} </label>
+        <div className='info-text'>
+          <p>Grid Size:</p><p>{state.size}</p>
+        </div>
         <input
-          id="sizeSlider"
           type="range"
           min="5"
           max="50"
@@ -105,9 +113,10 @@ export default function App() {
           value={sliderSize}
           onChange={handleSizeChange}
         />
-        <label htmlFor='speedSlider'>Speed: {state.speed} </label>
+        <div className='info-text'>
+          <p>Speed:</p><p>{state.speed}</p>
+        </div>
         <input
-          id='speedSlider'
           type='range'
           min='1'
           max='10'
