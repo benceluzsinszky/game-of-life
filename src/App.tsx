@@ -2,28 +2,46 @@ import { useEffect, useReducer, useState } from 'react';
 import GameGrid from './components/GameGrid';
 import './styles/App.css';
 
+export interface State {
+  size: number;
+  speed: number;
+  generation: number;
+  isRunning: boolean;
+  gridArray: number[];
+}  
+
+export type Action =
+  | { type: 'SET_SIZE'; size: number }
+  | { type: 'SET_SPEED'; speed: number }
+  | { type: 'INCREASE_GENERATION' }
+  | { type: 'RESET_GENERATION' }
+  | { type: 'START_RUNNING' }
+  | { type: 'STOP_RUNNING' }
+  | { type: 'SET_GRID'; gridArray: number[] };
+
+const reducer = (state: State, action: Action) => {
+  switch (action.type) {
+    case 'SET_SIZE':
+      return { ...state, size: action.size };
+    case 'SET_SPEED':
+      return { ...state, speed: action.speed };
+    case 'INCREASE_GENERATION':
+      return { ...state, generation: state.generation + 1 };
+    case 'RESET_GENERATION':
+      return { ...state, generation: 0 };
+    case 'START_RUNNING':
+      return { ...state, isRunning: true };
+    case 'STOP_RUNNING':
+      return { ...state, isRunning: false };
+    case 'SET_GRID':
+      return { ...state, gridArray: action.gridArray };
+    default:
+      return state;
+  }
+};
 
 export default function App() {
-  const reducer = (state, action) => {
-    switch (action.type) {
-      case 'SET_SIZE':
-        return { ...state, size: action.payload };
-      case 'SET_SPEED':
-        return { ...state, speed: action.payload };
-      case 'INCREASE_GENERATION':
-        return { ...state, generation: state.generation + 1 };
-      case 'RESET_GENERATION':
-        return { ...state, generation: 0 };
-      case 'START_RUNNING':
-        return { ...state, isRunning: true };
-      case 'STOP_RUNNING':
-        return { ...state, isRunning: false };
-      case 'SET_GRID':
-        return { ...state, gridArray: action.payload };
-      default:
-        return state;
-    }
-  };
+
   const [state, dispatch] = useReducer(reducer, {
     size: 10,
     speed: 5,
@@ -38,17 +56,17 @@ export default function App() {
 
   const [aliveCells, setAliveCells] = useState(0);
 
-  const handleSizeChange = (event) => {
+  const handleSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSliderSize(Number(event.target.value));
-    dispatch({ type: 'SET_SIZE', payload: parseInt(event.target.value) });
+    dispatch({ type: 'SET_SIZE', size: parseInt(event.target.value) });
     if (aliveCells > 0) {
       handleClear();
     }
   };
 
-  const handleSpeedChange = (event) => {
+  const handleSpeedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSliderSpeed(Number(event.target.value));
-    dispatch({ type: 'SET_SPEED', payload: parseInt(event.target.value) });
+    dispatch({ type: 'SET_SPEED', speed: parseInt(event.target.value) });
   };
 
   const handleStart = () => {
@@ -58,11 +76,11 @@ export default function App() {
 
   const handleRandomize = () => {
     dispatch({ type: 'STOP_RUNNING' });
-    let randomArray = [];
+    const randomArray = [];
     for (let i = 0; i < state.size * state.size; i++) {
       randomArray.push(Math.random() < 0.2 ? 1 : 0);
     }
-    dispatch({ type: 'SET_GRID', payload: randomArray });
+    dispatch({ type: 'SET_GRID', gridArray: randomArray });
 
     gridArrayToCss(randomArray);
   };
@@ -70,23 +88,27 @@ export default function App() {
   const handleClear = () => {
     dispatch({ type: 'STOP_RUNNING' });
     dispatch({ type: 'RESET_GENERATION' });
-    dispatch({ type: 'SET_GRID', payload: state.gridArray.fill(0) });
+    dispatch({ type: 'SET_GRID', gridArray: state.gridArray.fill(0) });
     setAliveCells(0);
     gridArrayToCss(state.gridArray);
   };
 
-  const gridArrayToCss = (gridArray) => {
+  const gridArrayToCss = (gridArray: number[]) => {
     for (let i = 0; i < gridArray.length; i++) {
+      const cell = document.getElementById(`cell-${i}`);
+      if (!cell) {
+        continue;
+      }
       if (gridArray[i] === 1) {
-        document.getElementById(`cell-${i}`).className = 'game-cell alive';
+        cell.className = 'game-cell alive';
       } else {
-        document.getElementById(`cell-${i}`).className = 'game-cell dead';
+        cell.className = 'game-cell dead';
       }
     }
   };
 
   useEffect(() => {
-    const sumGridArray = state.gridArray.reduce((a, b) => a + b, 0);
+    const sumGridArray = state.gridArray.reduce((a: number, b: number) => a + b, 0);
     setAliveCells(sumGridArray);
   }, [state.gridArray]);
 
@@ -131,7 +153,7 @@ export default function App() {
       </div>
       <div className='buttons'>
         <button onClick={handleStart}>Start</button>
-        <button onClick={() => dispatch({ type: "STOP_RUNNING", payload: false })}>Stop</button>
+        <button onClick={() => dispatch({ type: "STOP_RUNNING" })}>Stop</button>
         <button onClick={handleClear}>Clear</button>
         <button onClick={handleRandomize}>Random</button>
       </div>

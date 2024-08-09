@@ -1,25 +1,32 @@
-import { PropTypes } from 'prop-types';
 import { useCallback, useEffect } from 'react';
 import '../styles/gamegrid.css';
 
-export default function GameGrid({ state, dispatch, gridArrayToCss }) {
+import { Action, State } from '../App';
+
+interface GameGridProps {
+    state: State;
+    dispatch: React.Dispatch<Action>;
+    gridArrayToCss: (gridArray: number[]) => void;
+}
+
+export default function GameGrid({ state, dispatch, gridArrayToCss }: GameGridProps) {
     const size = state.size;
     const speed = state.speed;
     const isRunning = state.isRunning;
     const gridArray = state.gridArray;
 
-    const setGridArray = useCallback((newGridArray) => {
-        dispatch({ type: 'SET_GRID', payload: newGridArray });
+    const setGridArray = useCallback((newGridArray: number[]) => {
+        dispatch({ type: 'SET_GRID', gridArray: newGridArray });
     }, [dispatch]);
 
-    const createGrid = (size) => {
+    const createGrid = (size: number) => {
         const cellSize = screen.height / 3 / size;
 
-        let rows = [];
+        const rows = [];
         for (let i = 0; i < size; i++) {
-            let cells = [];
+            const cells = [];
             for (let j = 0; j < size; j++) {
-                let index = i * size + j;
+                const index = i * size + j;
                 cells.push(<td
                     key={index}
                     className={`game-cell dead`}
@@ -43,9 +50,9 @@ export default function GameGrid({ state, dispatch, gridArrayToCss }) {
         );
     };
 
-    const handleClickedCell = (event) => {
-        let newGridArray = [...gridArray];
-        const cellIndex = event.target.id.split('-')[1];
+    const handleClickedCell = (event: React.MouseEvent<HTMLTableCellElement>) => {
+        const newGridArray = [...gridArray];
+        const cellIndex: number = parseInt(event.currentTarget.id.split('-')[1]);
 
         if (gridArray[cellIndex] === 1) {
             newGridArray[cellIndex] = 0;
@@ -57,7 +64,7 @@ export default function GameGrid({ state, dispatch, gridArrayToCss }) {
         gridArrayToCss(newGridArray);
     };
 
-    const getNumberOfNeighbors = useCallback((cellIndex) => {
+    const getNumberOfNeighbors = useCallback((cellIndex: number) => {
         let neighbors = 0;
 
         // check top row
@@ -109,7 +116,7 @@ export default function GameGrid({ state, dispatch, gridArrayToCss }) {
 
         const cellsNumber = size * size;
 
-        let newGridArray = [...gridArray];
+        const newGridArray = [...gridArray];
 
         for (let i = 0; i < cellsNumber; i++) {
             const cell = gridArray[i];
@@ -132,7 +139,7 @@ export default function GameGrid({ state, dispatch, gridArrayToCss }) {
         setGridArray(newGridArray);
         gridArrayToCss(newGridArray);
 
-        const aliveCellsAtEnd = newGridArray.reduce((a, b) => { a + b }, 0);
+        const aliveCellsAtEnd = newGridArray.reduce((a: number, b: number) =>  a + b , 0);
 
         if (aliveCellsAtEnd === 0 || arraysAreEqual) {
             dispatch({ type: 'STOP_RUNNING' });
@@ -161,10 +168,4 @@ export default function GameGrid({ state, dispatch, gridArrayToCss }) {
             {createGrid(size)}
         </>
     );
-};
-
-GameGrid.propTypes = {
-    state: PropTypes.object.isRequired,
-    dispatch: PropTypes.func.isRequired,
-    gridArrayToCss: PropTypes.func.isRequired,
 };
