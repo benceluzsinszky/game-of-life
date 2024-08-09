@@ -41,7 +41,9 @@ export default function App() {
   const handleSizeChange = (event) => {
     setSliderSize(Number(event.target.value));
     dispatch({ type: 'SET_SIZE', payload: parseInt(event.target.value) });
-    handleClear();
+    if (aliveCells > 0) {
+      handleClear();
+    }
   };
 
   const handleSpeedChange = (event) => {
@@ -61,13 +63,15 @@ export default function App() {
       randomArray.push(Math.random() < 0.2 ? 1 : 0);
     }
     dispatch({ type: 'SET_GRID', payload: randomArray });
-    gridArrayToCss(state.gridArray);
+
+    gridArrayToCss(randomArray);
   };
 
   const handleClear = () => {
     dispatch({ type: 'STOP_RUNNING' });
     dispatch({ type: 'RESET_GENERATION' });
     dispatch({ type: 'SET_GRID', payload: state.gridArray.fill(0) });
+    setAliveCells(0);
     gridArrayToCss(state.gridArray);
   };
 
