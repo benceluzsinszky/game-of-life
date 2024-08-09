@@ -106,6 +106,8 @@ export default function GameGrid({ state, dispatch, gridArrayToCss }) {
             return;
         }
 
+        dispatch({ type: 'INCREASE_GENERATION' });
+
         const cellsNumber = size * size;
 
         let newGridArray = [...gridArray];
@@ -125,10 +127,19 @@ export default function GameGrid({ state, dispatch, gridArrayToCss }) {
             }
         }
 
+        const arraysAreEqual = gridArray.length === newGridArray.length &&
+            gridArray.every((value, index) => value === newGridArray[index]);
+
         setGridArray(newGridArray);
         gridArrayToCss(newGridArray);
 
-    }, [gridArray, setGridArray, gridArrayToCss, isRunning, size, getNumberOfNeighbors]);
+        const aliveCellsAtEnd = newGridArray.reduce((a, b) => { a + b }, 0);
+
+        if (aliveCellsAtEnd === 0 || arraysAreEqual) {
+            dispatch({ type: 'STOP_RUNNING' });
+        }
+
+    }, [gridArray, setGridArray, gridArrayToCss, isRunning, size, getNumberOfNeighbors, dispatch]);
 
     const calculateGameSpeed = useCallback(() => {
         return 200 / speed * 2;

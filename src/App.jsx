@@ -1,4 +1,4 @@
-import { useReducer, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import GameGrid from './components/GameGrid';
 import './styles/App.css';
 
@@ -10,8 +10,14 @@ export default function App() {
         return { ...state, size: action.payload };
       case 'SET_SPEED':
         return { ...state, speed: action.payload };
-      case 'SET_RUNNING':
-        return { ...state, isRunning: action.payload };
+      case 'INCREASE_GENERATION':
+        return { ...state, generation: state.generation++ };
+      case 'RESET_GENERATION':
+        return { ...state, generation: 0 };
+      case 'START_RUNNING':
+        return { ...state, isRunning: true };
+      case 'STOP_RUNNING':
+        return { ...state, isRunning: false };
       case 'SET_GRID':
         return { ...state, gridArray: action.payload };
       default:
@@ -21,6 +27,7 @@ export default function App() {
   const [state, dispatch] = useReducer(reducer, {
     size: 10,
     speed: 5,
+    generation: 0,
     isRunning: false,
     gridArray: Array(10 * 10).fill(0),
   }
@@ -28,6 +35,8 @@ export default function App() {
 
   const [sliderSize, setSliderSize] = useState(10);
   const [sliderSpeed, setSliderSpeed] = useState(5);
+
+  const [aliveCells, setAliveCells] = useState(0);
 
   const handleSizeChange = (event) => {
     setSliderSize(Number(event.target.value));
@@ -40,8 +49,13 @@ export default function App() {
     dispatch({ type: 'SET_SPEED', payload: parseInt(event.target.value) });
   };
 
+  const handleStart = () => {
+    dispatch({ type: 'START_RUNNING' });
+    dispatch({ type: 'RESET_GENERATION' });
+  };
+
   const handleRandomize = () => {
-    dispatch({ type: 'SET_RUNNING', payload: false });
+    dispatch({ type: 'STOP_RUNNING' });
     let randomArray = [];
     for (let i = 0; i < state.size * state.size; i++) {
       randomArray.push(Math.random() < 0.2 ? 1 : 0);
@@ -51,7 +65,7 @@ export default function App() {
   };
 
   const handleClear = () => {
-    dispatch({ type: 'SET_RUNNING', payload: false });
+    dispatch({ type: 'STOP_RUNNING' });
     dispatch({ type: 'SET_GRID', payload: state.gridArray.fill(0) });
     gridArrayToCss(state.gridArray);
   };
@@ -66,9 +80,16 @@ export default function App() {
     }
   };
 
+  useEffect(() => {
+    const sumGridArray = state.gridArray.reduce((a, b) => a + b, 0);
+    setAliveCells(sumGridArray);
+  }, [state.gridArray]);
+
   return (
     <>
       <h1>Conway&apos;s Game of Life</h1>
+      <p>Generation: {state.generation}</p>
+      <p>Alive Cells: {aliveCells}</p>
       <GameGrid
         state={state}
         dispatch={dispatch}
@@ -96,8 +117,8 @@ export default function App() {
         />
       </div>
       <div className='buttons'>
-        <button id="start" onClick={() => dispatch({ type: "SET_RUNNING", payload: true })}>Start</button>
-        <button id="stop" onClick={() => dispatch({ type: "SET_RUNNING", payload: false })}>Stop</button>
+        <button id="start" onClick={handleStart}>Start</button>
+        <button id="stop" onClick={() => dispatch({ type: "STOP_RUNNING", payload: false })}>Stop</button>
         <button id="clear" onClick={handleClear}>Clear</button>
         <button id="random" onClick={handleRandomize}>Random</button>
       </div>
