@@ -2,8 +2,15 @@ import { PropTypes } from 'prop-types';
 import { useCallback, useEffect } from 'react';
 import '../styles/gamegrid.css';
 
-export default function GameGrid({ size, speed, isRunning, gridArray, setGridArray, gridArrayToCss }) {
+export default function GameGrid({ state, dispatch, gridArrayToCss }) {
+    const size = state.size;
+    const speed = state.speed;
+    const isRunning = state.isRunning;
+    const gridArray = state.gridArray;
 
+    const setGridArray = useCallback((newGridArray) => {
+        dispatch({ type: 'SET_GRID', payload: newGridArray });
+    }, [dispatch]);
 
     const createGrid = (size) => {
         const cellSize = screen.height / 3 / size;
@@ -147,10 +154,7 @@ export default function GameGrid({ size, speed, isRunning, gridArray, setGridArr
 };
 
 GameGrid.propTypes = {
-    size: PropTypes.number.isRequired,
-    speed: PropTypes.number.isRequired,
-    isRunning: PropTypes.bool.isRequired,
-    gridArray: PropTypes.array.isRequired,
-    setGridArray: PropTypes.func.isRequired,
+    state: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
     gridArrayToCss: PropTypes.func.isRequired,
 };
