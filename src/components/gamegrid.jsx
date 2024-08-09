@@ -96,7 +96,6 @@ export default function GameGrid({ state, dispatch, gridArrayToCss }) {
                 neighbors++;
             }
         }
-        console.log(neighbors);
         return neighbors;
     }, [gridArray, size]);
 
